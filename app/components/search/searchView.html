@@ -1,0 +1,198 @@
+<script type="text/ng-template" id="locationPicker.html">
+    <button type="button" class="close" ng-click="ctrl.locationPickerPopover.isOpen = false">
+        <span aria-hidden='true'>&times</span>
+        <span class='sr-only'>Close</span>
+    </button>
+    <location-picker latitude="{{ctrl.search.criteria.location.latitude}}" longitude="{{ctrl.search.criteria.location.longitude}}" radius="{{ctrl.search.criteria.location.radius}}"></location-picker>
+</script>
+
+<section id="search-bar" class="bg-silver" slide-exp="ctrl.pullMenu.isShown" slide-duration="2000" slide-in>
+    <form class="form no-margin" ng-submit="ctrl.submitSearch()">
+        <fieldset ng-disabled="ctrl.search.status.ready === 0 || ctrl.search.status.ready === -1">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="search-hashtag">Hashtag</label>
+                    <input type="text" id="search-hashtag" class="form-control"
+                           placeholder="separate using spaces for multiple hashtags"
+                           ng-model="ctrl.search.criteria.hashtag">
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label for="search-distance">Location <span class="text-muted">(latitude,longitude,radius in meters)</span></label>
+                    <input type="text" id="search-distance" class="form-control"
+                           placeholder="focus to select location" autocomplete="off"
+                           ng-model="ctrl.search.criteria.geoLocation"
+                           uib-popover-template="ctrl.locationPickerPopover.templateUrl"
+                           popover-placement="bottom"
+                           popover-is-open="ctrl.locationPickerPopover.isOpen"
+                           popover-trigger="none"
+                           ng-focus="ctrl.locationPickerPopover.isOpen = true">
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label for="search-date">Date</label>
+                    <input type="text" id="search-date" class="form-control"
+                           placeholder="select a date from the calendar" ng-model="ctrl.search.criteria.date"
+                           uib-datepicker-popup="{{ctrl.datePickerOptions.format}}"
+                           is-open="ctrl.datePickerOptions.opened" max-date="ctrl.datePickerOptions.maxDate"
+                           show-weeks="ctrl.datePickerOptions.showWeeks"
+                           show-button-bar="ctrl.datePickerOptions.showButtonBar"
+                           ng-focus="ctrl.openDatePicker()">
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" ng-model="ctrl.search.criteria.twitter">
+                        Twitter
+                    </label>
+                </div>
+
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" ng-model="ctrl.search.criteria.instagram">
+                        Instagram
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-offset-4 col-md-4">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span class="glyphicon glyphicon-search"></span>
+                        <span>Search</span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>
+<div id="puller" class="bg-silver">
+    <button class="btn" ng-click="ctrl.pullMenu.toggle()">
+        <span class="glyphicon glyphicon-menu-down" ng-show="ctrl.pullMenu.isShown === false"></span>
+        <span class="glyphicon glyphicon-menu-up" ng-show="ctrl.pullMenu.isShown"></span>
+    </button>
+</div>
+
+
+<section id="search-result" class="text-center">
+    <div class="row" ng-show="ctrl.error.show === true">
+        <uib-alert type="{{ ctrl.error.type }}" close="ctrl.error.show = false" dismiss-on-timeout="10000">
+            <div role="alert">
+                {{ ctrl.error.message }}
+            </div>
+        </uib-alert>
+    </div>
+    
+    <div class="row form-inline text-right"
+         ng-show="ctrl.search.result.instagram.data.length > 0 || ctrl.search.result.twitter.data.length > 0">
+        <!-- <div class="sk-circle" ng-show="ctrl.save.status === 2">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+        
+        <input type="text" id="save-name" class="form-control"
+               placeholder="enter name of the collection"
+               ng-model="ctrl.save.name" ng-show="ctrl.save.status === 1 || ctrl.save.status === 2" ng-disabled="ctrl.save.status === 2">
+
+        <button type="button" class="btn btn-success" ng-click="ctrl.saveCollection()" ng-disabled="ctrl.save.status === 2">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            <span>Save</span>
+        </button> -->
+
+        <button type="button" class="btn btn-primary" ng-click="ctrl.initiatePrint()"
+                ng-disabled="ctrl.printer.result.status === 0" ng-show="ctrl.printer.data.length > 0">
+            <span class="glyphicon glyphicon-print"></span>
+            <span>Selected</span>
+        </button>
+
+        <button type="button" class="btn btn-primary" ng-click="ctrl.printAll()"
+                ng-disabled="ctrl.printer.result.status === 0">
+            <span class="glyphicon glyphicon-print"></span>
+            <span>All</span>
+        </button>
+    </div>
+    
+    <div class="row text-left" ng-show="ctrl.search.result.instagram.data.length > 0 || ctrl.search.result.twitter.data.length > 0">
+        <p><span>Search Result: </span> <strong><span>Instagram: {{ ctrl.search.result.instagram.data.length }}</span> <span>Twitter: {{ ctrl.search.result.twitter.data.length }}</span></strong></p>
+        <p>
+            <span>Results Per Page: </span>
+            <select ng-model="ctrl.pagination.rpp" ng-options="opt.value for opt in ctrl.pagination.rppOptions" ng-change="ctrl.setRpp()"></select>
+        </p>
+    </div>
+
+    <div class="row" style="margin: 0 10%"
+         ng-hide="ctrl.search.result.instagram.data.length > 0 || ctrl.search.result.twitter.data.length > 0 || ctrl.search.status.ready === 0 || ctrl.search.status.ready === -1">
+        <h2>No images to show. Use the search bar above.</h2>
+
+        <p>Possible search combinations are:</p>
+
+        <p><b>hashtag</b> | <b>date + location</b> | <b>hashtag + date + location</b></p>
+    </div>
+
+    <div id="loader" class="row" ng-show="ctrl.search.status.ready === 0 || ctrl.search.status.ready === -1 || ctrl.printer.status.ready === 0">
+        <div class="sk-fading-circle">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+        </div>
+        <p ng-show="ctrl.search.status.ready === 0"><button type="button" class="btn btn-link" ng-click="ctrl.stopSearch()">Click here to Stop</button></p>
+        <p style="margin: 0 10%" ng-show="ctrl.search.status.ready === -1"><span>Stopping search. This may take a few moment.</span></p>
+        <p ng-show="ctrl.printer.status.ready === 0">Sending {{ ctrl.printer.status.processedCount + 1 }} out of {{ ctrl.printer.status.printCount }} images to printer.</p>
+    </div>
+
+    <div id="photos" class="row">
+        <div class="pagination-actions col-sm-4 col-md-3 col-lg-2"
+             ng-show="ctrl.pagination.currentPage !== 1">
+            <button ng-click="ctrl.previousPage()">
+                <i class="glyphicon glyphicon-backward"></i>
+            </button>
+        </div>
+
+        <div class="{{ result.source }} col-sm-4 col-md-3 col-lg-2"
+             ng-repeat="result in ctrl.pagination.currentContent"
+             ng-class="{ selected : ctrl.checkSelection(result.media_id) }">
+            <a ng-href="{{result.url}}" target="_blank">
+                <div class="thumbnail" water-mark="watermark-{{ result.source }}">
+                    <img class="image" src="{{result.thumbnail}}">
+                </div>
+            </a>
+            <a href="#" ng-click="ctrl.toggleSelection(result.media_id, result.media_url)">Select</a>
+        </div>
+
+        <div class="pagination-actions col-sm-4 col-md-3 col-lg-2"
+             ng-show="ctrl.pagination.currentPage !== ctrl.pagination.pages && ctrl.pagination.pages !== 0">
+            <button ng-click="ctrl.nextPage()">
+                <i class="glyphicon glyphicon-forward"></i>
+            </button>
+        </div>
+
+        <div class="pagination-actions col-sm-4 col-md-3 col-lg-2"
+             ng-show="(ctrl.search.previous.max_id.instagram.length !== 0 || ctrl.search.previous.max_id.twitter !== '') && ctrl.pagination.currentPage === ctrl.pagination.pages && ctrl.search.result.all.length > 0">
+            <button ng-click="ctrl.loadMore()">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </button>
+        </div>
+    </div>
+</section>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>

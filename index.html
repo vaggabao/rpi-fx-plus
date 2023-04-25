@@ -1,0 +1,71 @@
+<!DOCTYPE html ng-app="fxApp">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" ng-app="fxApp">
+<head>
+    <base href="/">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
+    <title>FotoExpress+</title>
+
+    <link rel="stylesheet" href="assets/libs/bootstrap/vanilla/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="assets/css/photo.css">
+
+</head>
+
+<body>
+<section id="container">
+    <header>
+        <div class="pull-left">
+            <h1>FotoExpress+</h1>
+            <p>Search images from Instagram and Twitter with just a hashtag and a click.</p>
+        </div>
+    </header>
+
+    <main class="row">
+        <section id="menu" class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <li ui-sref-active="active"><a ui-sref="home">Home</a></li>
+                <li ui-sref-active="active"><a ui-sref="search">Search</a></li>
+                <li ui-sref-active="active"><a ui-sref="camera">Take a Photo</a></li>
+                <li ui-sref-active="active"><a ui-sref="gallery">Gallery</a></li>
+            </ul>
+        </section>
+
+        <section id="content" class="col-md-10" ui-view>
+
+        </section>
+    </main>
+
+    <footer>
+
+    </footer>
+</section>
+</body>
+
+<script src="assets/libs/jquery/jquery-2.1.4.min.js"></script>
+<script src="assets/libs/angular/angular.js"></script>
+<script src="assets/libs/angular/angular-ui-router.min.js"></script>
+<script src="assets/libs/angular/angular-cookies.min.js"></script>
+<script src="assets/libs/angular-bootstrap/ui-bootstrap-tpls-0.14.3.min.js"></script>
+<script src="assets/libs/ngGeolocation/ngGeolocation.min.js"></script>
+<script src="assets/libs/jquery-locationpicker/locationpicker.jquery.min.js"></script>
+<script src="assets/libs/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="assets/libs/ng-scrollbars/dist/scrollbars.min.js"></script>
+
+<script src="app/app.modules.js"></script>
+<script src="app/app.states.js"></script>
+<script src="app/components/search/searchController.js"></script>
+<script src="app/components/search/searchFactories.js"></script>
+<script src="app/components/search/collectionFactories.js"></script>
+<script src="app/components/search/slideIn.js"></script>
+<script src="app/components/search/watermark.js"></script>
+<script src="app/components/search/locationPicker.js"></script>
+<script src="app/components/camera/cameraController.js"></script>
+<script src="app/components/camera/cameraFactories.js"></script>
+<script src="app/components/gallery/GalleryController.js"></script>
+<script src="app/components/gallery/GalleryFactory.js"></script>
+</html>

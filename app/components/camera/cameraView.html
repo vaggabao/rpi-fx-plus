@@ -1,0 +1,31 @@
+<section id="camera" class="text-center" ng-hide="ctrl.photoDataURL !== ''">
+    <div>
+        <canvas id="camera-stream" width="320" height="240"></canvas>
+    </div>
+    <script src="/assets/libs/jsmpg/jsmpg.js"></script>
+    <br>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary btn-lg"
+                ng-click="ctrl.capture()">
+            <span class="glyphicon glyphicon-camera"></span>
+            <span>Take Photo</span>
+        </button>
+    </div>
+</section>
+
+<section id="captured-photo" class="text-center" ng-show="ctrl.photoDataURL !== ''">
+    <div>
+        <canvas id="snapshot" class="well" width="320" height="240"></canvas>
+    </div>
+    <br>
+    <div class="form-group btn-group-lg">
+        <button type="button" class="btn btn-primary" ng-click="ctrl.print()">
+            <span class="glyphicon glyphicon-print"></span>
+            <span>Print</span>
+        </button>
+        <button type="button" class="btn btn-warning" ng-click="ctrl.clear()">
+            <span class="glyphicon glyphicon-backward"></span>
+            <span>Back</span>
+        </button>
+    </div>
+</section>

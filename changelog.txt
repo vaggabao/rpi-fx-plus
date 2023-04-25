@@ -1,0 +1,14 @@
+Version 1.0.0
+Dec. 03, 2015 1:21 AM
+
+1. Search pagination
+2. Load more on search
+3. Removed Save of search results
+4. Added gallery for images took using the pi camera
+5. Moved API service inside the Web application
+
+NOTE:
+
+-- Run python service inside the Web App directory (already included inside fx-plus directory in this build). This is to allow the Web Application to access the images being saved when printing images took by the pi camera.
+-- No changes made on pistreaming
+-- Keep a copy of the previous fx-plus-service for backup purposes. If the python service won't start, try replacing the env directory in this build with the env of the previous build.
